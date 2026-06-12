@@ -436,26 +436,31 @@ const quizData = [
 ];
 
 const container = document.getElementById('quiz-content');
-let currentGroup = "";
 
-quizData.forEach((item, index) => {
-    if (currentGroup !== item.group) {
-        currentGroup = item.group;
-        const heading = document.createElement('div');
-        heading.className = 'section-title';
-        heading.innerText = currentGroup;
-        container.appendChild(heading);
+// 配列をランダムに並び替える関数（フィッシャー〜イェーツのシャッフル）
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
+    return array;
+}
 
+// 1. データをランダムにシャッフルする
+const shuffledData = shuffle([...quizData]);
+
+// 2. シャッフルされたデータでカードを生成する
+shuffledData.forEach((item, index) => {
     const card = document.createElement('div');
     card.className = 'card';
 
     const qBlock = document.createElement('div');
     qBlock.className = 'question-block';
 
+    // 問題文の先頭に、どの回の問題かわかるようにグループ名を小さく表示
     const qText = document.createElement('div');
     qText.className = 'question';
-    qText.innerHTML = `${index + 1}. ${item.q}`;
+    qText.innerHTML = `${index + 1}. <small style="color:#7f8c8d; font-size:12px;">[${item.group}]</small><br>${item.q}`;
 
     const btn = document.createElement('button');
     btn.className = 'btn-show';
@@ -476,6 +481,7 @@ quizData.forEach((item, index) => {
 
     container.appendChild(card);
 });
+
 </script>
 
 </body>
